@@ -229,14 +229,14 @@ end;
 
 //untuk menghindari kres, aplikasi hanya boleh 1 instance saja selain itu langsung tutup
 //anda juga bisa menambahkan blok begin end jika ingin menambahkan pesan untuk mengingatkan pengguna
-initialization
+{initialization
   th := CreateMutex(nil, True, pchar(ExtractFileName(application.ExeName)));
   if GetLastError = ERROR_ALREADY_EXISTS then
-    halt;
+    ShowMessage('HANDLING ERROR !');
 
 finalization
   if th <> 0 then
-    CloseHandle(th);
+    CloseHandle(th);   }
 
 end.
 

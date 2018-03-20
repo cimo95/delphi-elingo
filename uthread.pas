@@ -37,9 +37,7 @@ begin
   except
     on e: Exception do
     begin
-      writemp('fReadDT : '+e.Message, ExtractFilePath(application.ExeName) + 'error.log');
-      raise exception.Create('Terjadi kesalahan ketika menampilkan pengingat. Program akan ditutup.');
-      application.Terminate;
+      writemp('fReadDT : ' + e.Message, ExtractFilePath(application.ExeName) + 'error.log');
     end;
   end;
 end;
@@ -51,11 +49,13 @@ begin
     try
       if fReadDT(ui1) <> -1 then
       begin
+        DeleteFile(PChar(foldertemp + 'atur.ini'));
+        DeleteFile(PChar(foldertemp + 'elingo-msg.exe'));
         CopyFile(PChar(ExtractFilePath(application.ExeName) + 'atur.ini'), pchar(foldertemp + 'atur.ini'), false);
         CopyFile(PChar(ExtractFilePath(application.ExeName) + 'elingo.exe'), pchar(foldertemp + 'elingo-msg.exe'), false);
         Application.MainForm.WindowState := wsMinimized;
         Application.MainForm.Show;
-        ShellExecute(Application.Handle, 'open', PChar(foldertemp + 'elingo-msg.exe'), PChar(IntToStr(fReadDT(ui1))), nil, sw_show);
+        ShellExecute(0, 'open', PChar(foldertemp + 'elingo-msg.exe'), PChar(IntToStr(fReadDT(ui1))), nil, sw_show);
         Application.MainForm.Hide;
         Application.MainForm.WindowState := wsNormal;
         Sleep(59000);
@@ -68,9 +68,7 @@ begin
     except
       on e: Exception do
       begin
-        writemp('uthread : '+e.Message, ExtractFilePath(application.ExeName) + 'error.log');
-        raise exception.Create('Terjadi kesalahan ketika menampilkan pengingat. Program akan ditutup.');
-        application.Terminate;
+        writemp('uthread : ' + e.Message, ExtractFilePath(application.ExeName) + 'error.log');
       end;
     end;
   end;

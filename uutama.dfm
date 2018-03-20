@@ -1,6 +1,6 @@
 object futama: Tfutama
-  Left = 295
-  Top = 231
+  Left = 100
+  Top = 626
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'Elingo 1.0'
