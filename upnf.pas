@@ -9,28 +9,27 @@ uses
 type
   TLabel = class(StdCtrls.TLabel)
   private
-    fFontChanged: boolean;
+    ub0: boolean;
   public
     procedure Paint; override;
   end;
 
-procedure StringToFont(sFont: string; Font: TFont);
+function FolderTemp: string;
 
 function FontToString(Font: TFont): string;
 
 procedure bacaCfg;
 
+procedure gantiFU(ff: TForm);
+
 procedure simpanCfg;
 
-function FolderTemp: string;
-
-procedure gantiFU(ff: TForm);
+procedure StringToFont(sFont: string; Font: TFont);
 
 procedure wriTemp(fs0, fs1: string);
 
 var
-  fFon: TFont;
-  iLastCnt: integer;
+  ui0: integer;
 
 implementation
 
@@ -38,18 +37,17 @@ uses
   uutama, upesan;
 
 var
-  th: thandle;
+  h0: thandle;
 
 const
-  csfsBold = '|Bold';
-  csfsItalic = '|Italic';
-  csfsUnderline = '|Underline';
-  csfsStrikeout = '|Strikeout';
+  uc0 = '|Bold';
+  uc1 = '|Italic';
+  uc2 = '|Underline';
+  uc3 = '|Strikeout';
 
 {**
  * Fungsi dan/atau prosedur berikut menggunakan fungsi yang dibuat oleh pihak ketiga :
  * AntiAliasing oleh mghie dari Stack Overflow (https://stackoverflow.com/questions/921249/font-smoothing-in-delphi)
- * MyMessageDlg oleh Alex Egorov, Mohammad dari Stack Overflow (https://stackoverflow.com/questions/5417843/generic-dialog-with-custom-captions-for-buttons)
  **}
 
 //prosedur untuk membuat font mengaktifkan AntiAliasing
@@ -57,12 +55,12 @@ procedure TLabel.Paint;
 var
   LF: TLogFont;
 begin
-  if not fFontChanged then
+  if not ub0 then
   begin
     Win32Check(GetObject(Font.Handle, SizeOf(TLogFont), @LF) <> 0);
     LF.lfQuality := ANTIALIASED_QUALITY;
     Font.Handle := CreateFontIndirect(LF);
-    fFontChanged := TRUE;
+    ub0 := TRUE;
   end;
   inherited;
 end;
@@ -100,16 +98,16 @@ begin
       Color := StringToColor(Copy(sFont, 3, Length(sFont) - 3));
       Style := [];
 
-      if (Pos(csfsBold, s) > 0) then
+      if (Pos(uc0, s) > 0) then
         Style := Style + [fsBold];
 
-      if (Pos(csfsItalic, s) > 0) then
+      if (Pos(uc1, s) > 0) then
         Style := Style + [fsItalic];
 
-      if (Pos(csfsUnderline, s) > 0) then
+      if (Pos(uc2, s) > 0) then
         Style := Style + [fsUnderline];
 
-      if (Pos(csfsStrikeout, s) > 0) then
+      if (Pos(uc3, s) > 0) then
         Style := Style + [fsStrikeout];
     end;
   except
@@ -125,13 +123,13 @@ begin
   begin
     s := '';
     if (fsBold in Style) then
-      s := s + csfsBold;
+      s := s + uc0;
     if (fsItalic in Style) then
-      s := s + csfsItalic;
+      s := s + uc1;
     if (fsUnderline in Style) then
-      s := s + csfsUnderline;
+      s := s + uc2;
     if (fsStrikeout in Style) then
-      s := s + csfsStrikeout;
+      s := s + uc3;
     if ((Length(s) > 0) and ('|' = s[1])) then
     begin
       s := Copy(s, 2, Length(s) - 1);
@@ -155,9 +153,9 @@ begin
     tif.WriteString('atur', 'gambar', e3.text);
     tif.WriteInteger('atur', 'jumlah', lv0.Items.Count);
     tif.WriteBool('atur', 'diatas', cb0.Checked);
-    for i := 0 to iLastCnt - 1 do
+    for i := 0 to ui0 - 1 do
       tif.EraseSection('jadwal-' + inttostr(i));
-    iLastCnt := lv0.Items.Count;
+    ui0 := lv0.Items.Count;
     for i := 0 to lv0.Items.Count - 1 do
     begin
       tif.WriteString('jadwal-' + IntToStr(i), 'tgl', lv0.Items.Item[i].Caption);
@@ -184,9 +182,9 @@ begin
       futama.e1.Text := tif.readString('atur', 'font', '"Tahoma", 10, [], [clWindowText]');
       e2.Text := tif.ReadString('atur', 'nada', '');
       e3.Text := tif.ReadString('atur', 'gambar', '');
-      iLastCnt := tif.ReadInteger('atur', 'jumlah', 0);
+      ui0 := tif.ReadInteger('atur', 'jumlah', 0);
       cb0.Checked := tif.ReadBool('atur', 'diatas', false);
-      for i := 0 to iLastCnt - 1 do
+      for i := 0 to ui0 - 1 do
       begin
         tli := lv0.Items.Add;
         tli.Caption := tif.ReadString('jadwal-' + IntToStr(i), 'tgl', '12/06/1991');
@@ -194,9 +192,9 @@ begin
         tli.SubItems.Add(tif.ReadString('jadwal-' + IntToStr(i), 'psn', '-'));
       end;
       if not FileExists(futama.e2.Text) then
-        futama.e2.Text := 'default.wav';
+        futama.e2.Text := ExtractFilePath(application.ExeName) + 'default.wav';
       if not FileExists(futama.e3.Text) then
-        futama.e3.Text := 'default.jpg';
+        futama.e3.Text := ExtractFilePath(application.ExeName) + 'default.jpg';
       tif.Free;
     end;
   except
@@ -222,21 +220,23 @@ var
   tsl: TStringList;
 begin
   tsl := TStringList.Create;
-  tsl.Text := fs1;
+  if FileExists(fs0) then
+    tsl.LoadFromFile(fs0);
+  tsl.Add(fs1);
   tsl.SaveToFile(fs0);
   tsl.Free;
 end;
 
 //untuk menghindari kres, aplikasi hanya boleh 1 instance saja selain itu langsung tutup
 //anda juga bisa menambahkan blok begin end jika ingin menambahkan pesan untuk mengingatkan pengguna
-{initialization
-  th := CreateMutex(nil, True, pchar(ExtractFileName(application.ExeName)));
+initialization
+  h0 := CreateMutex(nil, True, pchar(ExtractFileName(application.ExeName)));
   if GetLastError = ERROR_ALREADY_EXISTS then
-    ShowMessage('HANDLING ERROR !');
+    Halt;
 
 finalization
-  if th <> 0 then
-    CloseHandle(th);   }
+  if h0 <> 0 then
+    CloseHandle(h0);
 
 end.
 

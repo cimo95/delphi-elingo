@@ -40,34 +40,29 @@ type
     mm0: TMediaPlayer;
     sb0: TStatusBar;
     t0: TTimer;
-    procedure bnadasrcClick(Sender: TObject);
-    procedure bbgsrcClick(Sender: TObject);
-    procedure b0Click(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
-    procedure b2Click(Sender: TObject);
-    procedure cbbgtransClick(Sender: TObject);
-    procedure b8Click(Sender: TObject);
-    procedure m0Change(Sender: TObject);
     procedure ala0Execute(Sender: TObject);
-    procedure b9Click(Sender: TObject);
-    procedure b5Click(Sender: TObject);
-    procedure t0Timer(Sender: TObject);
-    procedure m0KeyPress(Sender: TObject; var Key: Char);
-    procedure b6Click(Sender: TObject);
+    procedure b0Click(Sender: TObject);
     procedure b1Click(Sender: TObject);
+    procedure b2Click(Sender: TObject);
     procedure b3Click(Sender: TObject);
     procedure b4Click(Sender: TObject);
-    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure b5Click(Sender: TObject);
+    procedure b6Click(Sender: TObject);
     procedure b7Click(Sender: TObject);
+    procedure b8Click(Sender: TObject);
+    procedure b9Click(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure FormCreate(Sender: TObject);
     procedure lv0DblClick(Sender: TObject);
+    procedure m0Change(Sender: TObject);
+    procedure m0KeyPress(Sender: TObject; var Key: Char);
+    procedure t0Timer(Sender: TObject);
   private
     { Deklarasi hanya untuk penggunaan dalam unit ini saja }
     procedure WMHotKey(var Msg: TWMHotKey); message WM_HOTKEY;
   public
     { Deklarasi untuk penggunaan ke semua unit yang terintegerasi }
-    //ijumlah, ihk1
     ui0, ui1: integer;
-    //bopmsg,
     ub0, ub1: Boolean;
   end;
 
@@ -87,34 +82,6 @@ begin
     application.MainForm.Show;
 end;
 
-procedure Tfutama.bnadasrcClick(Sender: TObject);
-var
-  tod: TOpenDialog;
-begin
-  tod := topendialog.Create(nil);
-  tod.Title := 'Cari Nada Pengingat';
-  tod.Filter := 'Windows Wave (*.wav)|*.wav';
-  if tod.Execute and FileExists(tod.FileName) then
-  begin
-    simpancfg;
-  end;
-  tod.Free;
-end;
-
-procedure Tfutama.bbgsrcClick(Sender: TObject);
-var
-  topd: TOpenPictureDialog;
-begin
-  topd := topenpicturedialog.Create(nil);
-  topd.Title := 'Cari Gambar Latar Pengingat';
-  topd.Filter := 'Semua yang didukung (*.jpg;*.jpeg;*.bmp;*.ico;*.emf;*.wmf)|*.jpg;*.jpeg;*.bmp;*.ico;*.emf;*.wmf';
-  if topd.Execute and FileExists(topd.FileName) then
-  begin
-    simpancfg;
-  end;
-  topd.Free;
-end;
-
 procedure Tfutama.b0Click(Sender: TObject);
 var
   tfd: TFontDialog;
@@ -127,7 +94,6 @@ begin
   begin
     e1.Text := FontToString(tfd.Font);
     e1.Font := tfd.Font;
-    upnf.fFon := tfd.Font;
     simpancfg;
   end;
   tfd.Free;
@@ -142,7 +108,7 @@ begin
   if ExtractFileName(application.ExeName) = 'elingo-msg.exe' then
   begin
     bacacfg;
-    if StrToInt(ParamStr(1)) > upnf.iLastCnt then
+    if StrToInt(ParamStr(1)) > upnf.ui0 then
       Application.Terminate;
     ub0 := True;
   end
@@ -177,11 +143,6 @@ begin
       mm0.Notify := True;
     end;
   end;
-end;
-
-procedure Tfutama.cbbgtransClick(Sender: TObject);
-begin
-  simpancfg;
 end;
 
 procedure Tfutama.b8Click(Sender: TObject);

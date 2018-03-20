@@ -1,3 +1,15 @@
+{!           
+ ! -- Cimosoft Deident Script Command for Pascal : Delphi
+ ! -- Generated 19:00:15 19-03-2018
+ !                     
+ ! define mode pascal.delphi
+ ! define host "D:\programfilesku\delpitu\bin\delphi32Bindo.exe"
+ ! define format $fmt
+ ! set $a "readInitial Type"
+ ! set $b "calculate Type"
+ ! set $fmt $a+$b
+ ! render "D:\Proyek\Desktop\Elingo\Win\Delphi\Elingo.dpr"
+ !}
 program elingo;
 
 uses

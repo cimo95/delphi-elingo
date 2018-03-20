@@ -27,30 +27,33 @@ var
 begin
   try
     tif := TIniFile.Create(ExtractFilePath(application.exename) + 'atur.ini');
-    ui0 := tif.ReadInteger('atur', 'jumlah', 0);
+    ui0 := tif.ReadInteger('atur', 'jumlah', 1);
     result := -1;
     s0 := FormatDateTime('dd/MM/yyyy', Now);
     s1 := FormatDateTime('hh:mm', Now);
-    if tif.ReadString('jadwal-' + inttostr(fi), 'tgl', '10/06/1995') = s0 then
+    if tif.ReadString('jadwal-' + inttostr(fi), 'tgl', '12/06/1991') = s0 then
       if tif.ReadString('jadwal-' + inttostr(fi), 'wkt', '10:00') = s1 then
         result := fi;
   except
     on e: Exception do
     begin
-      writemp('fReadDT : ' + e.Message, ExtractFilePath(application.ExeName) + 'error.log');
+      writemp(ExtractFilePath(application.ExeName) + 'error.log', 'fReadDT : ' + e.Message);
     end;
   end;
 end;
 
 procedure ElingoSvc.Execute;
 begin
+  wriTemp(ChangeFileExt(application.ExeName, '.log'), 'SVCX BEGIN : ' + DateTimeToStr(now));
   while not terminated do
   begin
     try
       if fReadDT(ui1) <> -1 then
       begin
-        DeleteFile(PChar(foldertemp + 'atur.ini'));
-        DeleteFile(PChar(foldertemp + 'elingo-msg.exe'));
+        if fileexists(foldertemp + 'atur.ini') then
+          DeleteFile(PChar(foldertemp + 'atur.ini'));
+        if fileexists(foldertemp + 'elingo-msg.exe') then
+          DeleteFile(PChar(foldertemp + 'elingo-msg.exe'));
         CopyFile(PChar(ExtractFilePath(application.ExeName) + 'atur.ini'), pchar(foldertemp + 'atur.ini'), false);
         CopyFile(PChar(ExtractFilePath(application.ExeName) + 'elingo.exe'), pchar(foldertemp + 'elingo-msg.exe'), false);
         Application.MainForm.WindowState := wsMinimized;
@@ -68,7 +71,7 @@ begin
     except
       on e: Exception do
       begin
-        writemp('uthread : ' + e.Message, ExtractFilePath(application.ExeName) + 'error.log');
+        writemp(ExtractFilePath(application.ExeName) + 'error.log', 'uthread : ' + e.Message);
       end;
     end;
   end;
